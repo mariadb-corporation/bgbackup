@@ -443,6 +443,7 @@ function debugme {
     echo "cryptkey: " "$cryptkey"
     echo "nolock: " "$nolock"
     echo "compress: " "$compress"
+    echo "tempfolder: " "$tempfolder"
     echo "galera: " "$galera"
     echo "slave: " "$slave"
     echo "maillist: " "$maillist"
