@@ -79,15 +79,42 @@ function innocreate {
             fi
         fi
     elif [ "$bktype" = "archive" ] ; then
+
+	#if tempfolder is not set then  use /tmp
+	if [ -z "$tempfolder" ]	
+         then
+   		tempfolder=/tmp
+	fi
+ 
+	# verify the tempfolder directory exists
+	if [ ! -d "$tempfolder" ]
+	then
+    		log_info "Error: $tempfolder  directory not found"
+    		log_info "The configured directory for tempfolders does not exist. Please create this first."
+    		log_status=FAILED
+    		mail_log
+    		exit 1
+	fi
+
+	# verify user running script has permissions needed to write to tempfolder  directory
+	if [ ! -w "$tempfolder" ]; then
+    		log_info "Error: $tempfolder  directory is not writable."
+    		log_info "Verify the user running this script has write access to the configured tempfolder directory."
+    		log_status=FAILED
+    		mail_log
+    		exit 1
+	fi
+
+
         if [ "$(date +%A)" = "$fullbackday" ] || [ "$fullbackday" = "Everyday" ] ; then
             butype=Full
-            innocommand=$innocommand" /tmp --stream=$arctype --no-timestamp"
+            innocommand=$innocommand" $tempfolder --stream=$arctype --no-timestamp"
             arcname="$backupdir/full-$dirdate.$arctype.gz"
         else
             butype=Incremental
             incbasecmd=$mysqlcommand" \"SELECT bulocation FROM $backuphistschema.backup_history WHERE status = 'SUCCEEDED' AND hostname = '$mhost' AND deleted_at = 0 ORDER BY start_time DESC LIMIT 1\" "
             incbase=$(eval "$incbasecmd")
-            innocommand=$innocommand" /tmp --stream=$arctype --no-timestamp --incremental --incremental-basedir=$incbase"
+            innocommand=$innocommand" $tempfolder --stream=$arctype --no-timestamp --incremental --incremental-basedir=$incbase"
             arcname="$backupdir/inc-$dirdate.$arctype.gz"
         fi
     fi

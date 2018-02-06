@@ -87,6 +87,9 @@ bktype=directory
 # Archive type (tar or xbstream) for archive backup type
 # arctype=tar
 
+# Folter for tempory tar or xbstream archive
+tempfolder=/usr/temp/
+
 # Used for parallel and compress
 threads=4
 
