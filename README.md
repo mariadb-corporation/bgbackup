@@ -4,6 +4,7 @@ bgbackup is a MySQL ecosystem wrapper script for setting up a daily database bac
 
 bgbackup works with MariaDB, Percona, MySQL, Galera Cluster, WebscaleSQL, etc.
 
+
 The backups are done with xtrabackup/innobackupex. bgbackup supports multiple backup types, such as:
 
  * Standalone directories, with optional compression (qpress) and encryption (xbcrypt).
